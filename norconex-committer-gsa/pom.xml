@@ -81,6 +81,12 @@ along with Norconex Committer GSA. If not, see <http://www.gnu.org/licenses/>.
   </repositories>
 
   <dependencies>
+  	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.11</version>
+		<scope>test</scope>
+	</dependency>
     <dependency>
     	<groupId>com.norconex.collectors</groupId>
     	<artifactId>norconex-committer</artifactId>
@@ -101,6 +107,16 @@ along with Norconex Committer GSA. If not, see <http://www.gnu.org/licenses/>.
     	<artifactId>commons-codec</artifactId>
     	<version>1.7</version>
     </dependency>
+    <dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>4.3.4</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpmime</artifactId>
+		<version>4.3.4</version>
+	</dependency>
   </dependencies>
   
   <description>Google Search Appliance implementation of Norconex Committer.</description>
