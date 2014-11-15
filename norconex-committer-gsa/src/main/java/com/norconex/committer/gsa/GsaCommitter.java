@@ -18,19 +18,12 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
-import com.norconex.committer.AbstractMappedCommitter;
-import com.norconex.committer.CommitterException;
-import com.norconex.committer.ICommitOperation;
+import com.norconex.committer.core.AbstractMappedCommitter;
+import com.norconex.committer.core.CommitterException;
+import com.norconex.committer.core.ICommitOperation;
 
 public class GsaCommitter extends AbstractMappedCommitter {
-
-    private static final long serialVersionUID = -5010744222391427858L;
-    
-    private static final Logger LOG = 
-            LogManager.getLogger(GsaCommitter.class);
 
     private final CloseableHttpClient httpclient;
     

@@ -14,10 +14,10 @@ import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.norconex.committer.CommitterException;
-import com.norconex.committer.IAddOperation;
-import com.norconex.committer.ICommitOperation;
-import com.norconex.committer.IDeleteOperation;
+import com.norconex.committer.core.CommitterException;
+import com.norconex.committer.core.IAddOperation;
+import com.norconex.committer.core.ICommitOperation;
+import com.norconex.committer.core.IDeleteOperation;
 
 public final class XmlOutput {
 

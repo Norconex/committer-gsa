@@ -21,8 +21,8 @@ import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.norconex.committer.IAddOperation;
-import com.norconex.committer.ICommitOperation;
+import com.norconex.committer.core.IAddOperation;
+import com.norconex.committer.core.ICommitOperation;
 import com.norconex.commons.lang.map.Properties;
 
 public class XmlOutputTest {
@@ -105,6 +105,10 @@ public class XmlOutputTest {
             final Properties metadata, final String content) {
         return new IAddOperation() {
             private static final long serialVersionUID = -3080062268217542318L;
+            @Override
+            public String getReference() {
+                return metadata.getString("url");
+            }
             @Override
             public void delete() {
             }
