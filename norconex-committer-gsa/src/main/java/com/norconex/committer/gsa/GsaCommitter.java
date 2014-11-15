@@ -40,7 +40,58 @@ import org.apache.http.impl.client.HttpClients;
 import com.norconex.committer.core.AbstractMappedCommitter;
 import com.norconex.committer.core.CommitterException;
 import com.norconex.committer.core.ICommitOperation;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * Commits documents to Google Search Appliance.
+ * <p>
+ * XML configuration usage:
+ * </p>
+ * 
+ * <pre>
+ *  &lt;committer class="com.norconex.committer.GsaCommitter"&gt;
+ *      &lt;feedUrl&gt;(GSA feed URL)&lt;/feedUrl&gt;
+ *      &lt;sourceReferenceField keep="[false|true]"&gt;
+ *         (Optional name of field that contains the document reference, when 
+ *         the default document reference is not used.  The reference value
+ *         will be mapped to the "targetReferenceField" 
+ *         specified or target repository default field if one is defined
+ *         by the concrete implementation.
+ *         Once re-mapped, this metadata source field is 
+ *         deleted, unless "keep" is set to <code>true</code>.)
+ *      &lt;/sourceReferenceField&gt;
+ *      &lt;targetReferenceField&gt;
+ *         (Name of target repository field where to store a document reference.
+ *         If not specified, behavior is defined 
+ *         by the concrete implementation.) 
+ *      &lt;/targetReferenceField&gt;
+ *      &lt;sourceContentField keep="[false|true]"&gt
+ *         (If you wish to use a metadata field to act as the document 
+ *         "content", you can specify that field here.  Default 
+ *         does not take a metadata field but rather the document content.
+ *         Once re-mapped, the metadata source field is deleted,
+ *         unless "keep" is set to <code>true</code>.)
+ *      &lt;/sourceContentField&gt;
+ *      &lt;targetContentField&gt;
+ *         (Target repository field name for a document content/body.
+ *          Default is defined by concrete implementation.)
+ *      &lt;/targetContentField&gt;
+ *      &lt;commitBatchSize&gt;
+ *          (max number of documents to send to target repository at once)
+ *      &lt;/commitBatchSize&gt;
+ *      &lt;queueDir&gt;(optional path where to queue files)&lt;/queueDir&gt;
+ *      &lt;queueSize&gt;(max queue size before committing)&lt;/queueSize&gt;
+ *      &lt;maxRetries&gt;(max retries upon commit failures)&lt;/maxRetries&gt;
+ *      &lt;maxRetryWait&gt;(max delay between retries)&lt;/maxRetryWait&gt;
+
+ *  &lt;/committer&gt;
+ * </pre>
+ * 
+ * @author Pascal Dimassimo
+ */
 public class GsaCommitter extends AbstractMappedCommitter {
 
     private final CloseableHttpClient httpclient;
@@ -105,5 +156,31 @@ public class GsaCommitter extends AbstractMappedCommitter {
 
     @Override
     protected void saveToXML(XMLStreamWriter writer) throws XMLStreamException {
+        writer.writeStartElement("feedUrl");
+        writer.writeCharacters(getFeedUrl());
+        writer.writeEndElement();
     }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (!(other instanceof GsaCommitter))
+            return false;
+        GsaCommitter castOther = (GsaCommitter) other;
+        return new EqualsBuilder().appendSuper(super.equals(other))
+                .append(feedUrl, castOther.feedUrl).isEquals();
+    }
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().appendSuper(super.hashCode())
+                .append(feedUrl).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .appendSuper(super.toString()).append("feedUrl", feedUrl)
+                .toString();
+    }
+    
+    
 }
