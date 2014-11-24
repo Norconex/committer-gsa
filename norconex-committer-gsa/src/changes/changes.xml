@@ -8,7 +8,7 @@
   <body>
 
     <release version="1.0.0-SNAPSHOT" date="2014-??-??" description="Initial release">
-      <action dev="essiembp" type="add">
+      <action dev="essiembre" type="add">
         First release of Norconex GSA Committer.
       </action>
     </release>
