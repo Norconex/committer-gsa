@@ -17,6 +17,7 @@ package com.norconex.committer.gsa;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -32,6 +33,8 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.norconex.committer.core.AbstractMappedCommitter;
 import com.norconex.committer.core.CommitterException;
@@ -48,7 +51,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * </p>
  * 
  * <pre>
- *  &lt;committer class="com.norconex.committer.GsaCommitter"&gt;
+ *  &lt;committer class="com.norconex.committer.gsa.GsaCommitter"&gt;
  *      &lt;feedUrl&gt;(GSA feed URL)&lt;/feedUrl&gt;
  *      &lt;sourceReferenceField keep="[false|true]"&gt;
  *         (Optional name of field that contains the document reference, when 
@@ -89,6 +92,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Pascal Dimassimo
  */
 public class GsaCommitter extends AbstractMappedCommitter {
+    
+    private static final Logger LOG = LogManager.getLogger(GsaCommitter.class);
 
     private final CloseableHttpClient httpclient;
     
@@ -115,7 +120,7 @@ public class GsaCommitter extends AbstractMappedCommitter {
             xmlFile = File.createTempFile("batch", ".xml");
             FileOutputStream fout = new FileOutputStream(xmlFile);
             XmlOutput xmlOutput = new XmlOutput(fout);
-            xmlOutput.write(batch);
+            Map<String, Integer> stats = xmlOutput.write(batch);
             fout.close();
             
             HttpPost post = new HttpPost(feedUrl);
@@ -123,7 +128,7 @@ public class GsaCommitter extends AbstractMappedCommitter {
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             builder.addBinaryBody("data", xmlFile, 
                     ContentType.APPLICATION_XML, xmlFile.getName());
-            builder.addTextBody("datasource", "committer");
+            builder.addTextBody("datasource", "GSA_Commiter");
             builder.addTextBody("feedtype", "full");
             
             HttpEntity entity = builder.build();
@@ -136,6 +141,8 @@ public class GsaCommitter extends AbstractMappedCommitter {
                       + "Response code: " + status.getStatusCode()
                       + ". Response Message: " + status.getReasonPhrase());
             }
+                LOG.info("Sent " + stats.get("docAdded") + " additions and " 
+            + stats.get("docRemoved") + " removals to GSA");
             
         } catch (Exception e) {
             throw new CommitterException(

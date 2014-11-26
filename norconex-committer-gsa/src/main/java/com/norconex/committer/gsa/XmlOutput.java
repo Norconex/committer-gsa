@@ -17,7 +17,9 @@ package com.norconex.committer.gsa;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -25,8 +27,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import com.norconex.committer.core.CommitterException;
 import com.norconex.committer.core.IAddOperation;
@@ -35,25 +35,25 @@ import com.norconex.committer.core.IDeleteOperation;
 
 public final class XmlOutput {
 
-    private static final Logger LOG = LogManager.getLogger(XmlOutput.class);
     private final XMLStreamWriter writer;
-    
+
     public XmlOutput(OutputStream out) throws XMLStreamException {
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
         writer = factory.createXMLStreamWriter(
                 out, CharEncoding.UTF_8);
     }
 
-    public void write(List<ICommitOperation> batch)
+    public Map<String, Integer> write(List<ICommitOperation> batch)
             throws IOException, XMLStreamException {
-        
+
         writer.writeStartDocument("UTF-8", "1.0");
         writer.writeDTD(
-            "<!DOCTYPE gsafeed PUBLIC \"-//Google//DTD GSA Feeds//EN\" \"\">");
+                "<!DOCTYPE gsafeed PUBLIC \"-//Google//DTD GSA Feeds//EN\" \"\">");
         writer.writeStartElement("gsafeed");
         writeHeader();
         writer.writeStartElement("group");
 
+        Map<String, Integer> stats = new HashMap<String, Integer>();
         int docAdded = 0;
         int docRemoved = 0;
         for (ICommitOperation op : batch) {
@@ -74,13 +74,14 @@ public final class XmlOutput {
         writer.writeEndDocument();
         writer.flush();
         writer.close();
-        
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Sent " + docAdded + " additions and " + docRemoved 
-                    + " removals to GSA");
-        }
+
+        stats.put("docAdded", docAdded);
+        stats.put("docRemoved", docRemoved);
+
+        return stats;
+
     }
-    
+
     private void writeHeader() throws XMLStreamException {
         // TODO get those values from elsewhere
         writer.writeStartElement("header");
@@ -88,7 +89,7 @@ public final class XmlOutput {
         writeElement("feedtype", "full");
         writer.writeEndElement();
     }
-    
+
     private void writeElement(String name, String value) 
             throws XMLStreamException {
         writer.writeStartElement(name);
@@ -100,19 +101,25 @@ public final class XmlOutput {
             throws IOException, XMLStreamException {
         writer.writeStartElement("record");
         writer.writeAttribute("url", 
-                op.getMetadata().getString("url"));
+                op.getReference());
+        writer.writeAttribute("action", "add");
         writer.writeAttribute("mimetype", 
-                op.getMetadata().getString("mimetype"));
+                op.getMetadata().getString("collector.content-type"));
         writer.writeAttribute("last-modified", 
-                op.getMetadata().getString("last-modified"));
+                op.getMetadata().getString("Date"));
+        if (op.getMetadata().getString("title") != null) writeMetadata(op);
         writeContent(op);
 
         writer.writeEndElement();
     }
 
     private void writeContent(IAddOperation op) throws XMLStreamException,
-            IOException {
+    IOException {
         writer.writeStartElement("content");
+//                String encoding = op.getMetadata().getString(
+//                        "collector.content-encoding");
+//                if (encoding.equalsIgnoreCase("UTF-8")) encoding = "utf8";
+//                writer.writeAttribute("encoding", encoding);
         BufferedInputStream bufferedInput = null;
         byte[] buffer = new byte[1024 * 1024]; // 1MB
         try {
@@ -126,11 +133,22 @@ public final class XmlOutput {
         }
         writer.writeEndElement();
     }
-    
+
+    private void writeMetadata(IAddOperation op) throws XMLStreamException {
+        writer.writeStartElement("metadata");
+        writer.writeStartElement("meta");
+        writer.writeAttribute("name", "title");
+        writer.writeAttribute("content", op.getMetadata().getString("title"));
+        writer.writeEndElement();
+        writer.writeEndElement();
+    }
+
     private void writeRemove(IDeleteOperation op) 
             throws IOException, XMLStreamException {
-        writer.writeStartElement("remove");
-        writer.writeCharacters(op.getReference());
+        writer.writeStartElement("record");
+        writer.writeAttribute("url", 
+                op.getReference());
+        writer.writeAttribute("action", "remove");
         writer.writeEndElement();
     }
 }
