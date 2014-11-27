@@ -53,7 +53,7 @@ public class XmlOutputTest {
         
         Properties metadata = new Properties();
         metadata.addString("url", "http://www.corp.enterprise.com/hello01");
-        metadata.addString("mimetype", "text/plain");
+        metadata.addString("collector.content-type", "text/plain");
         metadata.addString("last-modified", "Tue, 6 Nov 2007 12:45:26 GMT");
         metadata.addString("collector.content-type", "text/plain");
         metadata.addString("Date", "Tue, 6 Nov 2007 12:45:26 GMT");        
@@ -64,18 +64,20 @@ public class XmlOutputTest {
                 buildMockAddOperation(metadata, content)));
         out.close();
         
+        System.out.println(file.toString());
         String xml = FileUtils.readFileToString(file, "UTF-8");
         assertEquals(xml,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<!DOCTYPE gsafeed PUBLIC \"-//Google//DTD GSA Feeds//EN\" \"\">"
                 + "<gsafeed>"
                 + "<header>"
-                + "<datasource>sample</datasource>"
+                + "<datasource>GSA_Commiter</datasource>"
                 + "<feedtype>full</feedtype>"
                 + "</header>"
                 + "<group>"
                 + "<record "
                 + "url=\"http://www.corp.enterprise.com/hello01\" "
+                + "action=\"add\" "
                 + "mimetype=\"text/plain\" "
                 + "last-modified=\"Tue, 6 Nov 2007 12:45:26 GMT\">"
                 + "<content>This is hello01</content>"

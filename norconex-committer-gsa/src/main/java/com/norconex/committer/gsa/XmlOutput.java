@@ -85,7 +85,7 @@ public final class XmlOutput {
     private void writeHeader() throws XMLStreamException {
         // TODO get those values from elsewhere
         writer.writeStartElement("header");
-        writeElement("datasource", "sample");
+        writeElement("datasource", "GSA_Commiter");
         writeElement("feedtype", "full");
         writer.writeEndElement();
     }
