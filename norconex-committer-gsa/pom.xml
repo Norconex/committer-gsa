@@ -370,7 +370,7 @@
     </plugins>
   </reporting>  
 
-  <url>http://norconex.com/product/committer-gsa/</url>
+  <url>http://norconex.com/collectors/committer-gsa/</url>
   <organization>
     <name>Norconex Inc.</name>
     <url>http://www.norconex.com</url>
