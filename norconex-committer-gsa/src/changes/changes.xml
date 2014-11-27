@@ -7,8 +7,8 @@
   </properties>
   <body>
 
-    <release version="1.0.0-SNAPSHOT" date="2014-??-??" description="Initial release">
-      <action dev="essiembre" type="add">
+    <release version="1.0.0" date="2014-11-27" description="Initial release">
+      <action dev="kalhomoud" type="add">
         First release of Norconex GSA Committer.
       </action>
     </release>
