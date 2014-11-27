@@ -55,6 +55,9 @@ public class XmlOutputTest {
         metadata.addString("url", "http://www.corp.enterprise.com/hello01");
         metadata.addString("mimetype", "text/plain");
         metadata.addString("last-modified", "Tue, 6 Nov 2007 12:45:26 GMT");
+        metadata.addString("collector.content-type", "text/plain");
+        metadata.addString("Date", "Tue, 6 Nov 2007 12:45:26 GMT");        
+        
         String content = "This is hello01";
         
         xmlOutput.write(Arrays.asList(
@@ -91,13 +94,17 @@ public class XmlOutputTest {
         Properties metadata1 = new Properties();
         metadata1.addString("url", "http://www.corp.enterprise.com/hello01");
         metadata1.addString("mimetype", "text/plain");
+        metadata1.addString("collector.content-type", "text/plain");
         metadata1.addString("last-modified", "Tue, 6 Nov 2007 12:45:26 GMT");
+        metadata1.addString("Date", "Tue, 6 Nov 2007 12:45:26 GMT");
         String content1 = "This is hello01";
         
         Properties metadata2 = new Properties();
         metadata2.addString("url", "http://www.corp.enterprise.com/hello02");
         metadata2.addString("mimetype", "text/plain");
+        metadata2.addString("collector.content-type", "text/plain");
         metadata2.addString("last-modified", "Tue, 6 Nov 2009 22:45:26 GMT");
+        metadata2.addString("Date", "Tue, 6 Nov 2009 22:45:26 GMT");
         String content2 = "This is hello02";
         
         xmlOutput.write(Arrays.asList(
