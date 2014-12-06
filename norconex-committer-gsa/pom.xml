@@ -308,7 +308,7 @@
   <distributionManagement>
     <site>
       <id>norconex-site-deployment</id>
-      <url>${site.baseurl}/committer-gsa/latest</url>
+      <url>${site.baseurl}/collectors/committer-gsa/latest</url>
     </site>
     <snapshotRepository>
       <id>ossrh</id>
