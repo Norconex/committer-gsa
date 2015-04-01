@@ -116,10 +116,6 @@ public final class XmlOutput {
     private void writeContent(IAddOperation op) throws XMLStreamException,
     IOException {
         writer.writeStartElement("content");
-//                String encoding = op.getMetadata().getString(
-//                        "collector.content-encoding");
-//                if (encoding.equalsIgnoreCase("UTF-8")) encoding = "utf8";
-//                writer.writeAttribute("encoding", encoding);
         BufferedInputStream bufferedInput = null;
         byte[] buffer = new byte[1024 * 1024]; // 1MB
         try {
