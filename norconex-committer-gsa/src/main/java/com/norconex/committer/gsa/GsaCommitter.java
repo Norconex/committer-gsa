@@ -67,7 +67,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *         If not specified, behavior is defined 
  *         by the concrete implementation.) 
  *      &lt;/targetReferenceField&gt;
- *      &lt;sourceContentField keep="[false|true]"&gt
+ *      &lt;sourceContentField keep="[false|true]"&gt;
  *         (If you wish to use a metadata field to act as the document 
  *         "content", you can specify that field here.  Default 
  *         does not take a metadata field but rather the document content.
