@@ -1,11 +1,11 @@
 Norconex GSA Committer
-Copyright 2013-2014 Norconex Inc.
+Copyright 2013-2016 Norconex Inc.
 
 For any inquiries about Norconex GSA Committer, please contact 
 Norconex Inc. at info@norconex.com.
 
 This product website and documentation is located at:
-http://www.norconex.com/collectors/committer-gsa/
+https://www.norconex.com/collectors/committer-gsa/
 
 Norconex licenses:
 ==================
